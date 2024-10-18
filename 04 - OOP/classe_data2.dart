@@ -7,6 +7,7 @@ class Data {
     return "$dia/$mes/$ano";
   }
 
+  @override
   String toString() {
     return obterFormatada();
   }
