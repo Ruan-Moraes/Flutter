@@ -6,12 +6,11 @@ export 'package:projeto_questionario/question.dart';
 class Question extends StatelessWidget {
   final String questionText;
 
-  Question(this.questionText, {super.key});
+  const Question(this.questionText, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
       margin: const EdgeInsets.all(14),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(

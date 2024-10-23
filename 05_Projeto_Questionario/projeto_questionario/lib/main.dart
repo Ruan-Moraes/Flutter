@@ -44,8 +44,24 @@ class App extends StatefulWidget {
 }
 
 class AppState extends State<App> {
-  final int _questionIndex = 0;
-  final int _totalPoints = 0;
+  int _questionIndex = 0;
+  int _totalPoints = 0;
+
+  void _answerQuestion(int points) {
+    if (_questionIndex <= questionnaire.length - 1) {
+      setState(() {
+        _questionIndex++;
+        _totalPoints += points;
+      });
+    }
+  }
+
+  void resetQuiz() {
+    setState(() {
+      _questionIndex = 0;
+      _totalPoints = 0;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,34 +76,111 @@ class AppState extends State<App> {
         ),
         body: SizedBox(
           width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Row(
-                children: [
-                  Expanded(
-                    child: Question(
-                      questionnaire[_questionIndex]['question'],
+          height: double.infinity,
+          child: _questionIndex == questionnaire.length
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Column(
+                      children: <Widget>[
+                        Container(
+                          margin: const EdgeInsets.all(14),
+                          child: Text(
+                            style: const TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                            _totalPoints >= 20
+                                ? 'Você é incrível! Você conseguiu $_totalPoints pontos🎉!'
+                                : 'Parabéns! Você conseguiu $_totalPoints pontos.',
+                          ),
+                        ),
+                        ElevatedButton(
+                          style: ButtonStyle(
+                            padding:
+                                WidgetStateProperty.all<EdgeInsetsGeometry>(
+                              const EdgeInsets.symmetric(
+                                vertical: 12,
+                                horizontal: 36,
+                              ),
+                            ),
+                            shape: WidgetStateProperty.all<OutlinedBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                            ),
+                            backgroundColor:
+                                WidgetStateProperty.all<Color>(Colors.blue),
+                          ),
+                          onPressed: resetQuiz,
+                          child: const Text(
+                              style: TextStyle(
+                                color: Color(0xFFFFFFFF),
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              'Reiniciar'),
+                        ),
+                      ],
                     ),
-                  )
-                ],
-              ),
-              Row(
-                children: [
-                  Expanded(
-                      child: Answers(questionnaire[_questionIndex]['answers']
-                          ['text'])), // Error
-                  Expanded(
-                      child: Answers(questionnaire[_questionIndex]['answers']
-                          ['text'])) // Error
-                ],
-              ),
-            ],
-          ),
+                  ],
+                )
+              : Column(
+                  children: <Widget>[
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Question(
+                            questionnaire[_questionIndex]['question'],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Answers(
+                              questionnaire[_questionIndex]['answers'][0]
+                                  ['text'],
+                              questionnaire[_questionIndex]['answers'][0]
+                                  ['points'],
+                              _answerQuestion),
+                        ),
+                        Expanded(
+                          child: Answers(
+                              questionnaire[_questionIndex]['answers'][1]
+                                  ['text'],
+                              questionnaire[_questionIndex]['answers'][1]
+                                  ['points'],
+                              _answerQuestion),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Answers(
+                              questionnaire[_questionIndex]['answers'][2]
+                                  ['text'],
+                              questionnaire[_questionIndex]['answers'][2]
+                                  ['points'],
+                              _answerQuestion),
+                        ),
+                        Expanded(
+                          child: Answers(
+                              questionnaire[_questionIndex]['answers'][3]
+                                  ['text'],
+                              questionnaire[_questionIndex]['answers'][3]
+                                  ['points'],
+                              _answerQuestion),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
         ),
       ),
     );
   }
 }
-
-// questionnaire[_questionIndex]['answers']['text']
